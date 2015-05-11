@@ -26,7 +26,7 @@ class HookResource(Resource):
         soup = BeautifulSoup(req_body_html)
         img_url = soup.img.get('src')
         for recipient in config.RECIPIENTS:
-            send_picture(recipient, img_url)
+            queue.enqueue(send_picture, recipient, img_url)
         return {'message': 'ok'}
 
 
