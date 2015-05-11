@@ -20,8 +20,10 @@ class HookResource(Resource):
     def post(self, request_path):
         if request_path != 'arlo':
             abort(404)
-        email_body = request.form.get('body-html', '')
-        soup = BeautifulSoup(email_body)
+        req_body_html = request.form.get('body-html', '')
+        if not req_body_html:
+            abort(400)
+        soup = BeautifulSoup(req_body_html)
         img_url = soup.img.get('src')
         for recipient in config.RECIPIENTS:
             send_picture(recipient, img_url)
